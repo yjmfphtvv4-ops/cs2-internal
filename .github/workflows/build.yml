@@ -11,18 +11,19 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        submodules: recursive
 
-    - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v2
+    - name: Configure CMake
+      run: cmake -B build -G "Visual Studio 17 2022" -A x64
+      working-directory: ./Internal
 
-    - name: Restore NuGet packages
-      run: nuget restore "Internal/X0reca CG Internal.vcxproj"
-
-    - name: Build with MSBuild
-      run: msbuild "Internal/X0reca CG Internal.vcxproj" /p:Configuration=Release /p:Platform=x64
+    - name: Build
+      run: cmake --build build --config Release
+      working-directory: ./Internal
 
     - name: Upload DLL
       uses: actions/upload-artifact@v4
       with:
         name: cs2_internal_dll
-        path: Internal/x64/Release/*.dll
+        path: Internal/build/Release/*.dll
