@@ -14,6 +14,12 @@ jobs:
       with:
         submodules: recursive
 
+    - name: Download CS2 Dumper Offsets
+      run: |
+        git clone --depth 1 https://github.com/a2x/cs2-dumper.git dumper
+        New-Item -ItemType Directory -Force -Path D:\cs2\output
+        Copy-Item -Path dumper\output\* -Destination D:\cs2\output -Recurse
+
     - name: Setup MSVC
       uses: ilammy/msvc-dev-cmd@v1
 
